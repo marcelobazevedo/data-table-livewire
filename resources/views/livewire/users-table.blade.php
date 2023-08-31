@@ -37,10 +37,26 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-4 py-3">nome</th>
-                            <th scope="col" class="px-4 py-3">email</th>
-                            <th scope="col" class="px-4 py-3">Função</th>
-                            <th scope="col" class="px-4 py-3">Criado</th>
+                            @include('livewire.includes.table-sortable-th', [
+    'name' => 'name',
+    'displayName' => 'Nome'
+])
+                            @include('livewire.includes.table-sortable-th', [
+    'name' => 'email',
+    'displayName' => 'Email'
+])
+                            @include('livewire.includes.table-sortable-th', [
+    'name' => 'is_admin',
+    'displayName' => 'Função'
+])
+                            @include('livewire.includes.table-sortable-th', [
+   'name' => 'created_at',
+   'displayName' => 'Criado'
+])
+
+{{--                            <th scope="col" class="px-4 py-3" wire:click="setSortBy('email')">email</th>--}}
+{{--                            <th scope="col" class="px-4 py-3" wire:click="setSortBy('is_admin')">Função</th>--}}
+{{--                            <th scope="col" class="px-4 py-3" wire:click="setSortBy('created_at')">Criado</th>--}}
                             <th scope="col" class="px-4 py-3">Atualizado</th>
                             <th scope="col" class="px-4 py-3">
                                 <span class="sr-only">Ação</span>
@@ -49,7 +65,7 @@
                         </thead>
                         <tbody>
                         @foreach($users as $user)
-                            <tr class="border-b dark:border-gray-700">
+                            <tr wire:key="{{$user->id}}" class="border-b dark:border-gray-700">
                                 <th scope="row"
                                     class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{$user->name}}</th>
@@ -60,7 +76,11 @@
                                 <td class="px-4 py-3">{{$user->created_at}}</td>
                                 <td class="px-4 py-3">{{$user->updated_at}}</td>
                                 <td class="px-4 py-3 flex items-center justify-end">
-                                    <button class="px-3 py-1 bg-red-500 text-white rounded">X</button>
+                                    <button
+                                        onclick="confirm('Deseja excluir {{$user->name}} ?') ||  event.stopImmediatePropagation()"
+                                        wire:click="delete({{$user->id}})"
+                                        class="px-3 py-1 bg-red-500 text-white rounded">X
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
